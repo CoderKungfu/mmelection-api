@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  root to: 'home#index'
-  get 'home/index'
+  root to: 'home#index', defaults: { format: :json }
+  get 'home/index', defaults: { format: :json }
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
