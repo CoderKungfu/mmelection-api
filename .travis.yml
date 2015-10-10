@@ -2,3 +2,8 @@ language: ruby
 rvm:
   - 2.2.3
 cache: bundler
+addons:
+  postgresql: "9.3"
+before_script:
+  - psql -c 'create database mmelection_test;' -U postgres
+  - cp config/database.yml.travis config/database.yml
