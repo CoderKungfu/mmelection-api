@@ -3,29 +3,80 @@ require 'rails_helper'
 RSpec.describe API::IncidentsController, type: :controller do
 
   describe 'GET #index' do
-    before do
-      get :index, format: :json
-    end
+    let(:json) { json_response = JSON.parse(response.body) }
 
-    it 'returns http success' do
-      expect(response).to have_http_status(:success)
-    end
-
-    it 'returns correct keys' do
-      json_response = JSON.parse(response.body)
-      expect(json_response.keys).to eq ['count','page','data']
-    end
-
-    context 'with incidents' do
+    context 'with correct request' do
       before do
-        FactoryGirl.create :incident
         get :index, format: :json
       end
 
-      it 'renders the Jbuilder for incident' do
-        json_response = JSON.parse(response.body)
-        expect(json_response['data']).to_not be_empty
-        expect(json_response['data'].first.keys).to eq ['incident_id','fraud_category','state','region','township','description','reported_time','photo','view_count']
+      it 'returns http success' do
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'returns correct keys' do
+        expect(json.keys).to eq ['count','page','data']
+      end
+
+      context 'with incidents' do
+        before do
+          FactoryGirl.create :incident
+          get :index, format: :json
+        end
+
+        it 'renders the Jbuilder for incident' do
+          expect(json['data']).to_not be_empty
+          expect(json['data'].first.keys).to eq ['incident_id','fraud_category','state','region','township','description','reported_time','photo','view_count']
+        end
+      end
+    end
+
+    context 'by category' do
+      let!(:type_1_incident) { FactoryGirl.create :incident, fraud_category_id: 1 }
+      let!(:type_2_incident) { FactoryGirl.create :incident, fraud_category_id: 2 }
+
+      before do
+        get :index, format: :json, fraud_category: 'type_1'
+      end
+
+      describe 'with the category param' do
+        it 'filters by category' do
+          expect(json['data'].count).to eq 1
+          expect(json['data'].first['incident_id']).to eq type_1_incident.id
+          expect(json['data'].first['fraud_category']).to eq 'type_1'
+        end
+      end
+    end
+
+    context 'sort by latest' do
+      let!(:later_incident) { FactoryGirl.create :incident, created_at: 2.days.ago }
+      let!(:recent_incident) { FactoryGirl.create :incident, created_at: 1.day.ago }
+
+      before do
+        get :index, format: :json
+      end
+
+      describe 'without any sort order' do
+        it 'sort by latest' do
+          expect(json['data'].first['incident_id']).to eq recent_incident.id
+          expect(json['data'].second['incident_id']).to eq later_incident.id
+        end
+      end
+    end
+
+    context 'sort by popular' do
+      let!(:normal_incident) { FactoryGirl.create :incident, view_count: 1 }
+      let!(:popular_incident) { FactoryGirl.create :incident, view_count: 10 }
+
+      before do
+        get :index, format: :json
+      end
+
+      describe 'without any sort order' do
+        it 'sort by latest' do
+          expect(json['data'].first['incident_id']).to eq popular_incident.id
+          expect(json['data'].second['incident_id']).to eq normal_incident.id
+        end
       end
     end
   end

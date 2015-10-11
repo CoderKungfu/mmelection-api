@@ -1,7 +1,7 @@
 class API::IncidentsController < ApplicationController
   def index
     @current_page = params[:page] || 1
-    @incidents = Incident.page(@current_page)
+    @incidents = incidents.order(order_by).page(@current_page)
     @total_records = @incidents.count
   end
 
@@ -16,6 +16,25 @@ class API::IncidentsController < ApplicationController
     rescue => e
       @response_code = 400
       @response_message = e.message
+    end
+  end
+
+  private
+
+  def incidents
+    if params[:fraud_category]
+      fraud_category = FraudCategory.find_by(code: params[:fraud_category])
+      Incident.where(fraud_category: fraud_category)
+    else
+      Incident
+    end
+  end
+
+  def order_by
+    if params[:sort_by] == 'popular'
+      'view_count DESC'
+    else
+      'created_at DESC'
     end
   end
 
