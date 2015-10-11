@@ -12,6 +12,7 @@ class API::IncidentsController < ApplicationController
     begin
       new_incident_params = incident_params
       new_incident_params['fraud_category'] = FraudCategory.find_by(code: incident_params['fraud_category'])
+      new_incident_params['photo'] = fetch_photo(incident_params['photo'])
       Incident.create!(new_incident_params)
     rescue => e
       @response_code = 400
@@ -42,5 +43,13 @@ class API::IncidentsController < ApplicationController
     json_post = JSON.parse(request.raw_post, symbolize_names: true)
     params.merge!(json_post)
     params.permit(:fraud_category, :state, :region, :township, :description, :reported_time, :photo, :reporter_name, :reporter_contact, :device_id)
+  end
+
+  def fetch_photo(file_string)
+    file = Tempfile.new(['mmelection_incident','.png'], encoding: 'ascii-8bit')
+    file.write(Base64.decode64(file_string))
+    file.close
+
+    file
   end
 end

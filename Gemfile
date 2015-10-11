@@ -8,6 +8,8 @@ gem 'pg'
 gem 'jbuilder'
 gem 'puma'
 gem 'kaminari'
+gem 'fog'
+gem 'carrierwave'
 
 group :development, :test do
   gem 'rspec-rails'
@@ -19,6 +21,7 @@ group :development, :test do
   gem 'shoulda-matchers'
   gem 'factory_girl_rails'
   gem 'faker'
+  gem 'dotenv-rails'
 end
 
 group :production do

@@ -4,6 +4,8 @@ class Incident < ActiveRecord::Base
 
   validates_presence_of :fraud_category, :state, :region, :township, :description, :device_id
 
+  mount_uploader :photo, PhotoUploader
+
   before_create do
     self.reported_time = Time.now if reported_time.nil?
   end

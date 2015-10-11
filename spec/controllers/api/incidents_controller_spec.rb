@@ -88,7 +88,9 @@ RSpec.describe API::IncidentsController, type: :controller do
     let(:township) { 'Yangon' } # Yangon
     let(:description) { 'some description' }
     let(:reported_time) { '2015-10-11 10:10:00 +06:30' }
-    let(:photo) { nil }
+    let(:image_file) { File.open(File.join(Rails.root, 'spec', 'support', 'images', 'bojio.png')) }
+    let(:photo) { Base64.encode64(image_file.read) }
+
     let(:reporter_name) { 'Ei Wai' }
     let(:reporter_contact) { 'contact@example.com' }
     let(:device_id) { 'device1' }
