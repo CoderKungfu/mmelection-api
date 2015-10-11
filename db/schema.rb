@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151010081113) do
+ActiveRecord::Schema.define(version: 20151011073505) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,5 +41,17 @@ ActiveRecord::Schema.define(version: 20151010081113) do
 
   add_index "incidents", ["device_id"], name: "index_incidents_on_device_id", using: :btree
   add_index "incidents", ["fraud_category_id"], name: "index_incidents_on_fraud_category_id", using: :btree
+
+  create_table "view_counts", force: :cascade do |t|
+    t.integer  "item_id"
+    t.string   "item_type"
+    t.string   "device_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "view_counts", ["device_id"], name: "index_view_counts_on_device_id", using: :btree
+  add_index "view_counts", ["item_type", "item_id", "device_id"], name: "by_viewer", using: :btree
+  add_index "view_counts", ["item_type", "item_id"], name: "index_view_counts_on_item_type_and_item_id", using: :btree
 
 end

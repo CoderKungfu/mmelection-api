@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   root to: 'home#index', defaults: { format: :json }
-  get 'home/index', defaults: { format: :json }
+
+  namespace :api, defaults: {format: :json} do
+    resources :incidents, only: [:index, :create] do
+      resources :view_counts, only: [:create]
+    end
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

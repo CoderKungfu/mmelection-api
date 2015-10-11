@@ -24,6 +24,7 @@ gem 'jbuilder'
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
 gem 'puma'
+gem 'kaminari'
 
 group :development, :test do
   gem 'rspec-rails'
@@ -33,6 +34,8 @@ group :development, :test do
   gem 'better_errors'
   gem 'spring-commands-rspec'
   gem 'shoulda-matchers'
+  gem 'factory_girl_rails'
+  gem 'faker'
 end
 
 group :production do
