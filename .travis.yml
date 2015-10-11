@@ -7,7 +7,7 @@ addons:
 before_script:
   - psql -c 'create database mmelection_test;' -U postgres
   - cp config/database.yml.travis config/database.yml
-  - bundle rake db:migrate
+  - bundle exec rake db:migrate
 deploy:
   provider: heroku
   api_key:
