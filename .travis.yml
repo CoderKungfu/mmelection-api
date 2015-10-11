@@ -1,14 +1,16 @@
 language: ruby
 rvm:
-- 2.2.3
+  - 2.2.3
 cache: bundler
 addons:
   postgresql: '9.3'
 before_script:
-- psql -c 'create database mmelection_test;' -U postgres
-- cp config/database.yml.travis config/database.yml
+  - psql -c 'create database mmelection_test;' -U postgres
+  - cp config/database.yml.travis config/database.yml
+  - bundle rake db:migrate
 deploy:
   provider: heroku
   api_key:
     secure: k7n2fXNiOpOsVk+ObcEk0ML0nbg/7ZSXkOsrvzAvNohd4SJrdLu2VCb+jaswFIxtd6nuboFGukBfP3nA48cBlFMMsWRuYycSyd1q3d7Wxrs0iirjl6aPBVr/ehmedFElz0st2W7BWNO3Mesi+jMXSBNSdqVGGZfq2ycyMj3abi5Zl/WggRJVdzzetIK1PfDE3KVE+3lzdASIIoM5HFEHnGNgSbt7ou/FAY8AYDdekYoCpBbFICbas5m/69oe0Twq0hfIYK+plcWA6fyP0sHZLO4SFxi1B+dVneSR1AwtXqS5RfR0+4XZAJXlqE1W6zLgiQYlgN/Rrv0LlqXYGn/tEqMds7NVv56VDdKLfajgULUCJM17ihyQepFfzEaylAtpLqtVWKl44cosRLBKPUNM/Lfncx81Lo6Bc6wsokJw5K2xsUFpXpAbikF2wFJTXjp+9iHMkHNWC7xPbHW17aTM3Y1gwjz/EQhdriExCHtzi+6iE6+/CP2yos/BjATNr0g6LdLOQMIzxv0jNp7HyZH++g7pFv4TmPszORqXkko4HdiYOk5rq1nv5c61zXLF2QVO8LO6iwlb5Mf+URnXYKFjTbI3uIGkt/dwjCeRvOFd1p6fzCPqVxuiLUce4Wnv+48RyW9Cdz5HNFvkM9irpBElAZl4FwFNJRi/OvVVaFJdklo=
   app: mmelection-api-staging
+  run: "rake db:migrate"
