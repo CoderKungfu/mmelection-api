@@ -53,30 +53,41 @@ RSpec.describe API::IncidentsController, type: :controller do
       let!(:recent_incident) { FactoryGirl.create :incident, created_at: 1.day.ago }
 
       before do
-        get :index, format: :json
+        get :index, format: :json, sort_by: 'latest'
       end
 
-      describe 'without any sort order' do
-        it 'sort by latest' do
-          expect(json['data'].first['incident_id']).to eq recent_incident.id
-          expect(json['data'].second['incident_id']).to eq later_incident.id
-        end
+      it 'sort by latest' do
+        expect(json['data'].first['incident_id']).to eq recent_incident.id
+        expect(json['data'].second['incident_id']).to eq later_incident.id
       end
     end
 
     context 'sort by popular' do
-      let!(:normal_incident) { FactoryGirl.create :incident, view_count: 1 }
-      let!(:popular_incident) { FactoryGirl.create :incident, view_count: 10 }
+      let!(:normal_incident) { FactoryGirl.create :incident, created_at: 1.day.ago, view_count: 1 }
+      let!(:popular_incident) { FactoryGirl.create :incident, created_at: 20.days.ago, view_count: 10 }
 
       before do
-        get :index, format: :json
+        get :index, format: :json, sort_by: 'popular'
       end
 
-      describe 'without any sort order' do
-        it 'sort by latest' do
-          expect(json['data'].first['incident_id']).to eq popular_incident.id
-          expect(json['data'].second['incident_id']).to eq normal_incident.id
-        end
+      it 'sort by popular' do
+        expect(json['data'].first['incident_id']).to eq popular_incident.id
+        expect(json['data'].second['incident_id']).to eq normal_incident.id
+      end
+    end
+
+    context 'my incident reports' do
+      let(:device_id) { 'my_device' }
+      let!(:my_incident) { FactoryGirl.create :incident, device_id: device_id }
+      let!(:other_incident) { FactoryGirl.create :incident }
+
+      before do
+        get :index, format: :json, device_id: device_id
+      end
+
+      it 'filters by my incidents' do
+        expect(json['data'].first['incident_id']).to eq my_incident.id
+        expect(json['data'].count).to eq 1
       end
     end
   end

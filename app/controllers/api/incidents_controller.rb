@@ -23,12 +23,16 @@ class API::IncidentsController < ApplicationController
   private
 
   def incidents
+    query = {}
+
     if params[:fraud_category]
       fraud_category = FraudCategory.find_by(code: params[:fraud_category])
-      Incident.where(fraud_category: fraud_category)
-    else
-      Incident
+      query[:fraud_category] = fraud_category
     end
+
+    query[:device_id] = params[:device_id] if params[:device_id]
+
+    Incident.where(query)
   end
 
   def order_by
