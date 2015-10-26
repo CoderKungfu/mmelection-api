@@ -11,8 +11,8 @@ class API::IncidentsController < ApplicationController
 
     begin
       new_incident_params = incident_params
-      new_incident_params['fraud_category'] = FraudCategory.find_by(code: incident_params['fraud_category'])
-      new_incident_params['photo'] = fetch_photo(incident_params['photo'])
+      new_incident_params['fraud_category'] = FraudCategory.find_by(code: new_incident_params['fraud_category'])
+      new_incident_params['photo'] = fetch_photo(new_incident_params['photo']) if new_incident_params['photo']
       Incident.create!(new_incident_params)
     rescue => e
       @response_code = 400

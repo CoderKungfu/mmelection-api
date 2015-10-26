@@ -135,5 +135,13 @@ RSpec.describe API::IncidentsController, type: :controller do
       expect(json['response_message']).to eq 'OK'
       expect(Incident.count).to eq 1
     end
+
+    context 'no image' do
+      let(:photo) { nil }
+
+      it 'should be valid' do
+        expect(response).to have_http_status(:success)
+      end
+    end
   end
 end
