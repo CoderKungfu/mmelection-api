@@ -13,6 +13,7 @@ RSpec.describe Incident, type: :model do
     it { should validate_presence_of :township }
     it { should validate_presence_of :description }
     it { should validate_presence_of :device_id }
+    it { should validate_presence_of :font_type }
   end
 
   describe 'before_create' do

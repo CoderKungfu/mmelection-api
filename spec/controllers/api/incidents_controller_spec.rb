@@ -18,6 +18,17 @@ RSpec.describe API::IncidentsController, type: :controller do
         expect(json.keys).to eq ['count','page','data']
       end
 
+      describe 'count' do
+        before do
+          FactoryGirl.create_list :incident, 26
+          get :index, format: :json
+        end
+
+        it 'show correct total count' do
+          expect(json['count']).to eq 26
+        end
+      end
+
       context 'with incidents' do
         before do
           FactoryGirl.create :incident
@@ -26,7 +37,7 @@ RSpec.describe API::IncidentsController, type: :controller do
 
         it 'renders the Jbuilder for incident' do
           expect(json['data']).to_not be_empty
-          expect(json['data'].first.keys).to eq ['incident_id','fraud_category','state','region','township','description','reported_time','photo','view_count']
+          expect(json['data'].first.keys).to eq ['incident_id','fraud_category','state','region','township','description','reported_time','photo','font_type','view_count']
         end
       end
     end
@@ -101,6 +112,7 @@ RSpec.describe API::IncidentsController, type: :controller do
     let(:reported_time) { '2015-10-11 10:10:00 +06:30' }
     let(:image_file) { File.open(File.join(Rails.root, 'spec', 'support', 'images', 'bojio.png')) }
     let(:photo) { Base64.encode64(image_file.read) }
+    let(:font_type) { 'ZG' }
 
     let(:reporter_name) { 'Ei Wai' }
     let(:reporter_contact) { 'contact@example.com' }
@@ -117,7 +129,8 @@ RSpec.describe API::IncidentsController, type: :controller do
         photo: photo,
         reporter_name: reporter_name,
         reporter_contact: reporter_contact,
-        device_id: device_id
+        device_id: device_id,
+        font_type: font_type
       }
     end
 

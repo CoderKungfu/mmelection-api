@@ -6,5 +6,6 @@ FactoryGirl.define do
     township Faker::Address.city
     description Faker::Lorem.paragraph(2)
     device_id Faker::Internet.mac_address
+    font_type 'ZG'
   end
 end

@@ -2,7 +2,7 @@ class API::IncidentsController < ApplicationController
   def index
     @current_page = params[:page] || 1
     @incidents = incidents.order(order_by).page(@current_page)
-    @total_records = @incidents.count
+    @total_records = @incidents.total_count
   end
 
   def create
@@ -46,7 +46,7 @@ class API::IncidentsController < ApplicationController
   def incident_params
     json_post = JSON.parse(request.raw_post, symbolize_names: true)
     params.merge!(json_post)
-    params.permit(:fraud_category, :state, :region, :township, :description, :reported_time, :photo, :reporter_name, :reporter_contact, :device_id)
+    params.permit(:fraud_category, :state, :region, :township, :description, :reported_time, :photo, :reporter_name, :reporter_contact, :device_id, :font_type)
   end
 
   def fetch_photo(file_string)
