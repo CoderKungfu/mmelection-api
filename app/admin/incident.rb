@@ -32,6 +32,9 @@ ActiveAdmin.register Incident do
       row 'Reported At' do |incident|
         incident.reported_time
       end
+      row 'Category' do |incident|
+        incident.fraud_category.name
+      end
       row :state
       row :region
       row :township
