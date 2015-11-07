@@ -11,6 +11,7 @@ gem 'fog'
 gem 'carrierwave'
 gem 'activeadmin', '~> 1.0.0.pre2'
 gem 'devise'
+gem 'uglifier'
 
 group :development, :test do
   gem 'rspec-rails'

@@ -341,6 +341,9 @@ GEM
     tilt (2.0.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    uglifier (2.7.2)
+      execjs (>= 0.3.0)
+      json (>= 1.8.0)
     warden (1.2.3)
       rack (>= 1.0)
 
@@ -369,6 +372,7 @@ DEPENDENCIES
   shoulda-matchers
   spring
   spring-commands-rspec
+  uglifier
 
 BUNDLED WITH
    1.10.6
