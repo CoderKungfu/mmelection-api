@@ -36,7 +36,7 @@ ActiveAdmin.register Incident do
       row :region
       row :township
       row :photo do |incident|
-        image_tag incident.photo, width: '200px' if incident.photo.present?
+        image_tag incident.photo if incident.photo.present?
       end
       row :description
       row :reporter_name
